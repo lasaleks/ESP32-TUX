@@ -640,6 +640,17 @@ static void tux_panel_ota(lv_obj_t *parent)
     lv_label_set_text(lbl_update_status, "Click to check for updates");
 }
 
+static void alarm_on_event_handler(lv_event_t* e)
+{
+    printf("alarm_on_event_handler\n");
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t *btn = lv_event_get_target(e);
+    if (code == LV_EVENT_CLICKED)
+    {
+        printf("alarm_on_event_handler click\n");
+    }
+}
+
 static void tux_panel_devinfo(lv_obj_t *parent)
 {
     island_devinfo = tux_panel_create(parent, LV_SYMBOL_TINT " DEVICE INFO", 200);
@@ -651,7 +662,22 @@ static void tux_panel_devinfo(lv_obj_t *parent)
     lbl_device_info = lv_label_create(cont_devinfo);
     // Monoaspace font for alignment
     lv_obj_set_style_text_font(lbl_device_info,&font_robotomono_13,0); 
+    lv_label_set_text_fmt(lbl_device_info, "Firmware Version %s",get_firmware_version());
+    //lv_label_set_text(lbl_device_info, "INFO ESP32\n1\n2\n3\n4\n");
+
+
+    // Check for Updates button
+    lv_obj_t *btn_unprov = lv_btn_create(cont_devinfo);
+    lv_obj_set_size(btn_unprov, LV_SIZE_CONTENT, 40);
+    lv_obj_align(btn_unprov, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_t *lbl2 = lv_label_create(btn_unprov);
+    lv_label_set_text(lbl2, "Alarm ON");
+    lv_obj_center(lbl2);
+    lv_obj_add_event_cb(btn_unprov, alarm_on_event_handler, LV_EVENT_CLICKED, NULL);    
+    printf("tux_panel_devinfo\n");
 }
+
+
 
 static void create_page_remote(lv_obj_t *parent)
 {
@@ -695,8 +721,8 @@ static void create_page_remote(lv_obj_t *parent)
 static void create_page_home(lv_obj_t *parent)
 {
     /* HOME PAGE PANELS */
-    tux_panel_clock_weather(parent);
-    //tux_panel_devinfo(parent);  
+    //tux_panel_clock_weather(parent);
+    tux_panel_devinfo(parent);  
 }
 
 static void create_page_settings(lv_obj_t *parent)
