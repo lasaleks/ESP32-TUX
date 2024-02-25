@@ -642,12 +642,21 @@ static void tux_panel_ota(lv_obj_t *parent)
 
 static void alarm_on_event_handler(lv_event_t* e)
 {
-    printf("alarm_on_event_handler\n");
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *btn = lv_event_get_target(e);
     if (code == LV_EVENT_CLICKED)
     {
-        printf("alarm_on_event_handler click\n");
+        printf("Alarm ON\n");
+    }
+}
+
+static void alarm_off_event_handler(lv_event_t* e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t *btn = lv_event_get_target(e);
+    if (code == LV_EVENT_CLICKED)
+    {
+        printf("Alarm OFF\n");
     }
 }
 
@@ -659,25 +668,24 @@ static void tux_panel_devinfo(lv_obj_t *parent)
     // Get Content Area to add UI elements
     lv_obj_t *cont_devinfo = tux_panel_get_content(island_devinfo);
 
-    lbl_device_info = lv_label_create(cont_devinfo);
-    // Monoaspace font for alignment
-    lv_obj_set_style_text_font(lbl_device_info,&font_robotomono_13,0); 
-    lv_label_set_text_fmt(lbl_device_info, "Firmware Version %s",get_firmware_version());
-    //lv_label_set_text(lbl_device_info, "INFO ESP32\n1\n2\n3\n4\n");
+    // Alarm ON
+    lv_obj_t *btn_alarm_on = lv_btn_create(cont_devinfo);
+    lv_obj_set_size(btn_alarm_on, LV_SIZE_CONTENT, 40);
+    lv_obj_align(btn_alarm_on, LV_ALIGN_TOP_LEFT, 0, 0);
+    lv_obj_t *lbl_alarm_on = lv_label_create(btn_alarm_on);
+    lv_label_set_text(lbl_alarm_on, "Alarm ON");
+    lv_obj_center(lbl_alarm_on);
+    lv_obj_add_event_cb(btn_alarm_on, alarm_on_event_handler, LV_EVENT_CLICKED, NULL); 
 
-
-    // Check for Updates button
-    lv_obj_t *btn_unprov = lv_btn_create(cont_devinfo);
-    lv_obj_set_size(btn_unprov, LV_SIZE_CONTENT, 40);
-    lv_obj_align(btn_unprov, LV_ALIGN_CENTER, 0, 0);
-    lv_obj_t *lbl2 = lv_label_create(btn_unprov);
-    lv_label_set_text(lbl2, "Alarm ON");
-    lv_obj_center(lbl2);
-    lv_obj_add_event_cb(btn_unprov, alarm_on_event_handler, LV_EVENT_CLICKED, NULL);    
-    printf("tux_panel_devinfo\n");
+    // Alarm OFF
+    lv_obj_t *btn_alarm_off = lv_btn_create(cont_devinfo);
+    lv_obj_set_size(btn_alarm_off, LV_SIZE_CONTENT, 40);
+    lv_obj_align(btn_alarm_off, LV_ALIGN_TOP_RIGHT, 0, 0);
+    lv_obj_t *lbl_alarm_off = lv_label_create(btn_alarm_off);
+    lv_label_set_text(lbl_alarm_off, "Alarm OFF");
+    lv_obj_center(lbl_alarm_off);
+    lv_obj_add_event_cb(btn_alarm_off, alarm_off_event_handler, LV_EVENT_CLICKED, NULL); 
 }
-
-
 
 static void create_page_remote(lv_obj_t *parent)
 {
